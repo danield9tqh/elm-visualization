@@ -1,6 +1,5 @@
 module SVGBranch exposing (createBranch)
 
-import Html
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import String.Format exposing (format2, format4, format6)
@@ -18,8 +17,9 @@ branchVerticalSpread - |  /
                         *(x1, y1)
 
 --}
-createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature width color =
+createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature width color percentageFill =
     Svg.path [
+    strokeDasharray ((toString percentageFill)++ "%, "++(toString (100-percentageFill))++"%"),
     d (branchVector x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature),
     stroke color, strokeWidth width] []
 

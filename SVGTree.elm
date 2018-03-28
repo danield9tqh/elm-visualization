@@ -30,7 +30,7 @@ uniformBranchRightToLeft x y = let
     upperBranchLength = 50
     branchCurvature = 15
   in
-    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0"
+    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0" 100
 
 uniformBranchLeftToRight x y = let
     branchHorizontalSpread = 50
@@ -39,6 +39,6 @@ uniformBranchLeftToRight x y = let
     upperBranchLength = 50
     branchCurvature = 15
   in
-    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0"
+    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0" 100
 
 main = canvas 4
