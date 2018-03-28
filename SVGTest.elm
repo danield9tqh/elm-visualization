@@ -7,20 +7,29 @@ import String.Format exposing (format2, format4, format6)
 
 branch : Html.Html msg
 branch =
-    svg [width "500px", height "500px", viewBox "0 0 57 500", version "1.1"]
-      [ Svg.g [stroke "none", strokeWidth "1", fill "none", fillRule "evenodd", strokeLinecap "round"] [path] ]
+    svg [width "500px", height "500px", viewBox "0 0 500 500", version "1.1"]
+      [ Svg.g [stroke "none", strokeWidth "1", fill "none", fillRule "evenodd", strokeLinecap "round"] tree ]
 
-path = createBranch 20 190 70 3 "5" "#BD10E0"
+path = someWhatTallBranch 20 400
+path2 = someWhatTallBranch 70 300
+path3 = someWhatTallBranch 120 200
+
+tree = branches 4 20 400
+branches n x y = case n of
+  0 -> []
+  _ -> [someWhatTallBranch x y] ++ branches (n-1) (x+50) (y-60)
+
+someWhatTallBranch x y = createBranch x y (x+branchHorizontalSpread) (y-branchVerticalSpread) "5" "#BD10E0"
 
 createBranch x1 y1 x2 y2 width color =
     Svg.path [
-    d (branchVector x1 y1 x2 y2),
+    d (branchVector x1 y1 x2 y2 10 50),
     stroke color, strokeWidth width] []
 
-lowerBranchLength = 30
-upperBranchLength = 120
+branchHorizontalSpread = 50
+branchVerticalSpread = 100
 
-branchVector x1 y1 x2 y2 =
+branchVector x1 y1 x2 y2 lowerBranchLength upperBranchLength =
   let
     startingPoint = svgMovePoint x1 y1
     controlPoint1 = svgControlPoint x1 y1 x1 y1 x1 (y1 - lowerBranchLength)
