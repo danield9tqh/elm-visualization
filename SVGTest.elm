@@ -10,40 +10,45 @@ branch =
     svg [width "500px", height "500px", viewBox "0 0 500 500", version "1.1"]
       [ Svg.g [stroke "none", strokeWidth "1", fill "none", fillRule "evenodd", strokeLinecap "round"] tree ]
 
-path = someWhatTallBranch 20 400
-path2 = someWhatTallBranch 70 300
-path3 = someWhatTallBranch 120 200
+path = uniformBranch 20 400
+path2 = uniformBranch 70 300
+path3 = uniformBranch 120 200
 
 tree = branches 4 20 400
 branches n x y = case n of
   0 -> []
-  _ -> [someWhatTallBranch x y] ++ branches (n-1) (x+50) (y-60)
+  _ -> [uniformBranch x y] ++ branches (n-1) (x+50) (y-60)
 
-someWhatTallBranch x y = createBranch x y (x+branchHorizontalSpread) (y-branchVerticalSpread) "5" "#BD10E0"
+uniformBranch x y = let
+    branchHorizontalSpread = 50
+    branchVerticalSpread = 100
+    lowerBranchLength = 10
+    upperBranchLength = 50
+    branchCurvature = 15
+  in
+    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0"
 
-createBranch x1 y1 x2 y2 width color =
+createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature width color =
     Svg.path [
-    d (branchVector x1 y1 x2 y2 10 50),
+    d (branchVector x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature),
     stroke color, strokeWidth width] []
 
-branchHorizontalSpread = 50
-branchVerticalSpread = 100
+{-- Creates a branch with the given coordinates and dimensions
 
-{-- Creates a branch with the given coordinates and size
-
-                         * (x2, y2)
-                         |
-                         |  - upperBranchLength
-                        /
-                       /
-lowerBranchLength  -  |
-                      |
-                      *(x1, y1)
+                           *
+                           |   <- upperBranchLength
+                       ^   |
+branchVerticalSpread - |  /
+                       | /
+                        |--->    branchHorizontalSpread
+  lowerBranchLength ->  |
+                        *(x1, y1)
 
 --}
-branchCurvature = 15
-branchVector x1 y1 x2 y2 lowerBranchLength upperBranchLength =
+branchVector x1 y1 branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature =
   let
+    x2 = (x1+branchHorizontalSpread)
+    y2 = (y1-branchVerticalSpread)
     controlPoint3 = svgControlPoint x2 y2 x2 y2 x2 y2
     controlPoint2 = svgControlPoint x1 (y1 - lowerBranchLength - branchCurvature) x2 (y2 + upperBranchLength + branchCurvature) x2 (y2 + upperBranchLength)
     controlPoint1 = svgControlPoint x1 y1 x1 y1 x1 (y1 - lowerBranchLength)
