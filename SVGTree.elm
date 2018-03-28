@@ -3,7 +3,6 @@ module SVGTree exposing (canvas)
 import Html
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
-import String.Format exposing (format2, format4, format6)
 import SVGBranch exposing (createBranch)
 
 canvas : Int -> Html.Html msg
