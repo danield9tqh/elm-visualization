@@ -29,16 +29,25 @@ createBranch x1 y1 x2 y2 width color =
 branchHorizontalSpread = 50
 branchVerticalSpread = 100
 
+{-- Creates a branch with the given coordinates and size
+
+                         * (x2, y2)
+                         |
+                         |  - upperBranchLength
+                        /
+                       /
+lowerBranchLength  -  |
+                      |
+                      *(x1, y1)
+
+--}
+branchCurvature = 15
 branchVector x1 y1 x2 y2 lowerBranchLength upperBranchLength =
   let
-    startingPoint = svgMovePoint x1 y1
-    controlPoint1 = svgControlPoint x1 y1 x1 y1 x1 (y1 - lowerBranchLength)
-    controlPoint2 = svgControlPoint x1 (y1 - lowerBranchLength - 15) x2 (y2 + upperBranchLength + 15) x2 (y2 + upperBranchLength)
     controlPoint3 = svgControlPoint x2 y2 x2 y2 x2 y2
-    x1s = toString x1
-    y1s = toString y1
-    x2s = toString x2
-    y2s = toString y2
+    controlPoint2 = svgControlPoint x1 (y1 - lowerBranchLength - branchCurvature) x2 (y2 + upperBranchLength + branchCurvature) x2 (y2 + upperBranchLength)
+    controlPoint1 = svgControlPoint x1 y1 x1 y1 x1 (y1 - lowerBranchLength)
+    startingPoint = svgMovePoint x1 y1
     vector = format4 "{1} {2} {3} {4}"
       (startingPoint, controlPoint1, controlPoint2, controlPoint3)
   in
