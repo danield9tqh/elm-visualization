@@ -1,6 +1,5 @@
 import Html exposing (Html)
 import Html.Attributes exposing (..)
--- import ParseInt exposing (parseInt)
 import CursiveSVG exposing (cursiveD)
 import Keyboard
 import InstructionsSVG exposing (instructions)
