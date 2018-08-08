@@ -1,4 +1,4 @@
-module SVGBranch exposing (createBranch)
+module SVGBranch exposing (createBranch, svgLine)
 
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -36,12 +36,26 @@ branchVector x1 y1 branchHorizontalSpread branchVerticalSpread lowerBranchLength
   in
     vector
 
+svgLine x1 y1 x2 y2 width color = let
+    startingPoint = svgMovePoint x1 y1
+    endingPoint = svgLinePoint x2 y2
+    dPath = format2 "{1} {2}" (startingPoint, endingPoint)
+  in
+    Svg.path [ d dPath, stroke color, strokeWidth width] []
+
 svgMovePoint x y =
   let
       xs  = toString x
       ys  = toString y
   in
       format2 "M{1},{2}" (xs, ys)
+
+svgLinePoint x y =
+  let
+      xs  = toString x
+      ys  = toString y
+  in
+      format2 "L {1},{2}" (xs, ys)
 
 svgControlPoint x1 y1 x2 y2 x y =
   let
