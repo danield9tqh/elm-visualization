@@ -24,4 +24,4 @@ If you would like to render SVG code from Sketch in Elm, it's pretty simple
   3) Use the Atom html-elm package to convert the SVG into Elm code
   4) Some manual coercion of the code is necessary so that it works with [Elm's SVG library](http://package.elm-lang.org/packages/elm-lang/svg/latest/)
 
-If you would like to see a simple, completed example check out `CursiveSVG.elm`. You can replicate the growing effect with an arbitrary SVG path made in Sketch with little effort.
+If you would like to see a simple, completed example check out the cursive 'D' in `CursiveSVG.elm` and it's corresponding Sketch source file `CursiveD.sketch`. You can replicate the growing effect with an arbitrary SVG path made in Sketch with little effort.
