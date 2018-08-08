@@ -1,27 +1,32 @@
 import Html exposing (Html)
 import Html.Attributes exposing (..)
-import ParseInt exposing (parseInt)
 import SVGTree exposing (svgUniformTree)
+import InstructionsSVG exposing (instructions)
 import Keyboard
 
-type alias Model = Int
+type alias Model = {
+  fillPercent : Int,
+  showInstructions : Bool
+}
+
+newModel : Int -> Bool -> Model
+newModel fillPercent showInstructions =
+  { fillPercent = fillPercent
+  , showInstructions = showInstructions
+  }
 
 init : (Model, Cmd Msg)
-init = (0, Cmd.none)
+init = (newModel 0 True, Cmd.none)
 
 type Msg
-  = Change String
-  | KeyMsg Int
+  = KeyMsg Int
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
-    Change str -> case (parseInt str) of
-      Ok num -> (num, Cmd.none)
-      Err _  -> (0, Cmd.none)
     KeyMsg code -> case code of
-      38 -> (model + 1, Cmd.none)
-      40 -> (Basics.max (model - 1) 0, Cmd.none)
+      38 -> (newModel (model.fillPercent + 1)                False , Cmd.none)
+      40 -> (newModel (Basics.max (model.fillPercent - 1) 0) False , Cmd.none)
       _  -> (model, Cmd.none)
 
 subscriptions : Model -> Sub Msg
@@ -35,7 +40,10 @@ view model = Html.div [Html.Attributes.style
   , ("align-items", "center")
   , ("justify-content", "center")
   ] ]
-    [ (svgUniformTree 4 (toFloat model)) ]
+    [( case model.showInstructions of
+          True -> instructions
+          False -> (svgUniformTree 4 (toFloat model.fillPercent))
+      )]
 
 main : Program Never Model Msg
 main =
