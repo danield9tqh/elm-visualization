@@ -1,43 +1,47 @@
-module SVGTree exposing (canvas)
+module SVGTree exposing (svgUniformTree)
 
 import Html
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
-import SVGBranch exposing (createBranch)
+import SVGBranch exposing (createBranch, svgLine)
 
-canvas : Int -> Html.Html msg
-canvas numBranches =
+type TreeDirection = TreeLeft | TreeRight
+
+svgUniformTree : Int -> Float -> Html.Html msg
+svgUniformTree numBranches percentFiled =
     svg [width "100%", height "90%", version "1.1" ]
       [ {-- fillRect, --}
-       Svg.g [stroke "none", strokeWidth "1", fill "none", fillRule "evenodd", strokeLinecap "round"] (branchesRightToLeft numBranches 550 350)
+       Svg.g [stroke "none", strokeWidth "1", fill "none", fillRule "evenodd", strokeLinecap "round"]
+       ((uniformTree numBranches (percentFiled) TreeRight 350 350 ))
       ]
 
-fillRect = rect [width "100%", height "90%", fill "red"] []
+uniformTree : Int -> Float -> TreeDirection -> Int -> Int -> List (Svg msg)
+uniformTree numBranches percentFiled direction x y = case direction of
+  TreeLeft  -> branchesRightToLeft numBranches x y percentFiled
+  TreeRight -> branchesLeftToRight numBranches x y percentFiled
 
-branchesLeftToRight n x y = case n of
+branchesLeftToRight n x y percentFilled = case n of
   0 -> []
-  _ -> [uniformBranchLeftToRight x y] ++ branchesLeftToRight (n-1) (x+50) (y-60)
+  _ -> [uniformBranchLeftToRight x y percentFilled] ++ branchesLeftToRight (n-1) (x+50) (y-60) percentFilled
 
-branchesRightToLeft n x y = case n of
+branchesRightToLeft n x y percentFilled = case n of
   0 -> []
-  _ -> [uniformBranchRightToLeft x y] ++ branchesRightToLeft (n-1) (x-50) (y-60)
+  _ -> [uniformBranchRightToLeft x y percentFilled] ++ branchesRightToLeft (n-1) (x-50) (y-60) percentFilled
 
-uniformBranchRightToLeft x y = let
+uniformBranchRightToLeft x y percentFilled = let
     branchHorizontalSpread = -50
     branchVerticalSpread = 100
     lowerBranchLength = 10
     upperBranchLength = 50
     branchCurvature = 15
   in
-    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0" 100
+    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0" percentFilled
 
-uniformBranchLeftToRight x y = let
+uniformBranchLeftToRight x y percentFilled = let
     branchHorizontalSpread = 50
     branchVerticalSpread = 100
     lowerBranchLength = 10
     upperBranchLength = 50
     branchCurvature = 15
   in
-    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0" 100
-
-main = canvas 4
+    createBranch x y branchHorizontalSpread branchVerticalSpread lowerBranchLength upperBranchLength branchCurvature "5" "#BD10E0" percentFilled
